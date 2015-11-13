@@ -11,28 +11,13 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
-
-    @IBAction func postBtn(sender: UIButton) {
-        print("Button clicked")
-    }
-    
-    
-    var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        
-        let post = Post(imagePath: "", title: "Post1", description: "Post1 description")
-        let post2 = Post(imagePath: "", title: "Post2", description: "Post2 description")
-        let post3 = Post(imagePath: "", title: "Post3", description: "Post3 description")
-        
-        posts.append(post)
-        posts.append(post2)
-        posts.append(post3)
-        
-        self.tableView.reloadData()
+        DataService.instance.loadPosts()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPostsLoaded:", name: "postsLoaded", object: nil)
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -41,7 +26,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let post = self.posts[indexPath.row]
+        let post = DataService.instance.loadedPosts[indexPath.row]
         if let cell = tableView.dequeueReusableCellWithIdentifier("PostCell") as? PostCell {
             cell.configureCell(post)
             return cell
@@ -58,13 +43,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.posts.count
+        return DataService.instance.loadedPosts.count
     }
     
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
     
+    func onPostsLoaded(notif: AnyObject) {
+        self.tableView.reloadData()
+    }
     
     
 }

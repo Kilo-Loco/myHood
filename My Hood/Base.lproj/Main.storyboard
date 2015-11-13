@@ -110,7 +110,6 @@
                                 </constraints>
                                 <state key="normal" image="camera"/>
                                 <connections>
-                                    <action selector="postBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bai-ka-1zn"/>
                                     <segue destination="qI1-nB-Ne6" kind="show" identifier="AddPostVC" id="g5R-hB-Hdu"/>
                                 </connections>
                             </button>
